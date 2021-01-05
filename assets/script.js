@@ -2,41 +2,7 @@ $(document).ready(function(){
     //array for the user-inputted cities
     let cities = []
 
-
     getLocalStorage()
-
-    // function getCity(){
-        // //api key
-        // let apiKey = ""
-        // //user input
-        // let city = $("#search-value").val()
-        // //query url
-        // let queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey
-        
-        
-
-        // //create AJAX call for specific city being queried
-        // $.ajax({
-        //     url: queryURL,
-        //     method: "GET"
-        // }).then(function(response){
-        //     var goodCity = "yes"
-        //     console.log(goodCity)
-        //     var cityName = response.name
-        //     //var icon = response.weather
-        //     var now = new Date()
-        //     var date = (now.getMonth() + 1)+"/"+now.getDate()+"/"+now.getFullYear()
-        //     //display city name and date in header in "today" div
-        //     $("#today").append("<h1>"+cityName+" ("+date+") </h1>")
-
-        // })
-        // .catch(function(){
-        //     var goodCity = "no"
-        //     console.log(goodCity)
-        //     alert("Please input a valid city")
-        // })
-
-    // }
 
     //create an event listener for the search button function
     $("#search-button").on("click", function(event){
@@ -47,8 +13,8 @@ $(document).ready(function(){
         let city = $("#search-value").val()
         //query url
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey
-        //checks if input is a good city
-        // var goodCity
+        let queryURL2 = "api.openweathermap.org/data/2.5/forecast?q="+city+"&appid="+apiKey //add this next in a new ajax call?
+  
         
         //create AJAX call for specific city being queried
         $.ajax({
@@ -61,6 +27,10 @@ $(document).ready(function(){
             //var icon = response.weather
             var now = new Date()
             var date = (now.getMonth() + 1)+"/"+now.getDate()+"/"+now.getFullYear()
+            let temp = parseInt(1.8*(response.main.temp-273)+32)
+            let humidity = response.main.humidity
+            let windSpeed = response.wind.speed
+            //let uvIndex = response.
             //user input 
             let city = $("#search-value").val()
             
@@ -75,20 +45,24 @@ $(document).ready(function(){
                 //set local storage for past cities searched
                 localStorage.setItem("City"+[i+1], cities[i])
 
-                //create function of the buttons
-                // function cityButtons(){
-                    //for(j=0;j<cities.length;j++){
-                        $("#"+cities[i]+"btn").on("click", function(){
-                            //create new div to house city's weather in "today"
-                            $("#today").append('<div id="'+cities[i]+'"></div>') //this shows up as id undefined
-                            //display city name and date in header in new div
-                            $("#"+cities[i]).append("<h1>"+cityName+" ("+date+") </h1>")
-                        })
-                    //}
-                // }
-            }
+                //create new div to house city's weather in "today"
+                $("#today").append('<div id="'+cities[i]+'"></div>')
+                $("#"+cities[i]).css("border","solid 1px black")
+                //display city name and date in header in new div
+                $("#"+cities[i]).append("<h1>"+cityName+" ("+date+") </h1>")
+                //display temp, humidity, wind speed, and UV index
+                $("#"+cities[i]).append("<br><p>Temperature: "+temp+"&#8457<br><br>Humidity: "+humidity+"%<br><br>Wind Speed: "+windSpeed+" mph</p>")
+                
+                //create new div to house city's forecast in "forecast"
+                $("#forecast").append('div id="'+cities[i]+'forecast"></div>')
+                $("#"+cities[i]+"forecast").append("")
 
-            // cityButtons()
+            }
+                //create function of the city buttons
+                $("#"+cities[i]+"btn").on("click", function(){
+                    $("#cities[i]").show()
+                    $("#cities["+!+"i]").hide()
+                })
         })
         .catch(function(){
             goodCity = "no"
