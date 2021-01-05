@@ -42,7 +42,7 @@ $(document).ready(function(){
     $("#search-button").on("click", function(event){
         event.preventDefault()
         //api key
-        let apiKey = ""
+        let apiKey = config.key
         //user input
         let city = $("#search-value").val()
         //query url
