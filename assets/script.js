@@ -12,8 +12,8 @@ $(document).ready(function(){
         //user input
         let city = $("#search-value").val()
         //query url
-        let queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey
-        let queryURL2 = "api.openweathermap.org/data/2.5/forecast?q="+city+"&appid="+apiKey //add this next in a new ajax call?
+        let queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=imperial&appid="+apiKey
+        let queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&units=imperial&appid="+apiKey
   
         
         //create AJAX call for specific city being queried
@@ -21,48 +21,87 @@ $(document).ready(function(){
             url: queryURL,
             method: "GET"
         }).then(function(response){
-            goodCity = "yes"
-            console.log(goodCity)
-            var cityName = response.name
-            //var icon = response.weather
-            var now = new Date()
-            var date = (now.getMonth() + 1)+"/"+now.getDate()+"/"+now.getFullYear()
-            let temp = parseInt(1.8*(response.main.temp-273)+32)
-            let humidity = response.main.humidity
-            let windSpeed = response.wind.speed
-            //let uvIndex = response.
-            //user input 
-            let city = $("#search-value").val()
-            
-            //append user-inputted city to the cities array
-            cities.push(city)
+            $.ajax({
+                url: queryURL2,
+                method: "GET"
+            }).then(function(response2){
+                goodCity = "yes"
+                console.log(goodCity)
+                let cityName = response.name
+                let icon = "http://openweathermap.org/img/wn/"+response.weather[0].icon+".png"
+                let now = new Date()
+                let date = (now.getMonth() + 1)+"/"+now.getDate()+"/"+now.getFullYear()
+                let temp = response.main.temp
+                let humidity = response.main.humidity
+                let windSpeed = response.wind.speed
+                //let uvIndex = response.
+                let date1 = (now.getMonth() + 1)+"/"+(now.getDate() + 1)+"/"+now.getFullYear()
+                let date2 = (now.getMonth() + 1)+"/"+(now.getDate() + 2)+"/"+now.getFullYear()
+                let date3 = (now.getMonth() + 1)+"/"+(now.getDate() + 3)+"/"+now.getFullYear()
+                let date4 = (now.getMonth() + 1)+"/"+(now.getDate() + 4)+"/"+now.getFullYear()
+                let date5 = (now.getMonth() + 1)+"/"+(now.getDate() + 5)+"/"+now.getFullYear()
+                let icon1 = "http://openweathermap.org/img/wn/"+response2.list[2].weather[0].icon+".png"
+                let icon2 = "http://openweathermap.org/img/wn/"+response2.list[10].weather[0].icon+".png"
+                let icon3 = "http://openweathermap.org/img/wn/"+response2.list[18].weather[0].icon+".png"
+                let icon4 = "http://openweathermap.org/img/wn/"+response2.list[26].weather[0].icon+".png"
+                let icon5 = "http://openweathermap.org/img/wn/"+response2.list[34].weather[0].icon+".png"
+                let temp1 = response2.list[2].main.temp
+                let temp2 = response2.list[10].main.temp
+                let temp3 = response2.list[18].main.temp
+                let temp4 = response2.list[26].main.temp
+                let temp5 = response2.list[34].main.temp
+                let humidity1 = response2.list[2].main.humidity
+                let humidity2 = response2.list[10].main.humidity
+                let humidity3 = response2.list[18].main.humidity
+                let humidity4 = response2.list[26].main.humidity
+                let humidity5 = response2.list[34].main.humidity
+                
+                //user input 
+                let city = $("#search-value").val()
+                
+                //append user-inputted city to the cities array
+                cities.push(city)
 
-            //append past searched cities to the ul element- create buttons for each city
-            $(".list-group").empty()
-            for (i=0;i<cities.length;i++){
-                $(".list-group").append($("<button id="+cities[i]+"btn>"+cities[i]+"</button>"))
+                //append past searched cities to the ul element- create buttons for each city
+                $(".list-group").empty()
+                for (i=0;i<cities.length;i++){
+                    
+                    $(".list-group").append($("<button id="+cities[i]+"btn>"+cities[i]+"</button>"))
 
-                //set local storage for past cities searched
-                localStorage.setItem("City"+[i+1], cities[i])
+                    //set local storage for past cities searched
+                    localStorage.setItem("City"+[i+1], cities[i])
+
+                    // //create function of the city buttons                    
+                    $("#"+cities[i]+"btn").on("click",function(){
+                        $("#"+cities[i]).show()
+                        console.log($("#"+cities[i])+"show")
+                        $("#"+cities[i]).siblings().hide()
+                        console.log($("#"+cities[i]).siblings())
+                    })
+                }
 
                 //create new div to house city's weather in "today"
-                $("#today").append('<div id="'+cities[i]+'"></div>')
-                $("#"+cities[i]).css("border","solid 1px black")
+                $("#"+cityName).siblings().hide()
+                $("#today").prepend('<div id="'+cityName+'"></div>')
+                $("#"+cityName).css("border","solid 1px black")
                 //display city name and date in header in new div
-                $("#"+cities[i]).append("<h1>"+cityName+" ("+date+") </h1>")
+                $("#"+cityName).append("<h1>"+cityName+" ("+date+") <img src='"+icon+"'></h1>")
                 //display temp, humidity, wind speed, and UV index
-                $("#"+cities[i]).append("<br><p>Temperature: "+temp+"&#8457<br><br>Humidity: "+humidity+"%<br><br>Wind Speed: "+windSpeed+" mph</p>")
-                
-                //create new div to house city's forecast in "forecast"
-                $("#forecast").append('div id="'+cities[i]+'forecast"></div>')
-                $("#"+cities[i]+"forecast").append("")
+                $("#"+cityName).append("<br><p>Temperature: "+temp+"&#8457<br><br>Humidity: "+humidity+"%<br><br>Wind Speed: "+windSpeed+" mph</p>")
+                $("#search-value").val('')
 
-            }
-                //create function of the city buttons
-                $("#"+cities[i]+"btn").on("click", function(){
-                    $("#cities[i]").show()
-                    $("#cities["+!+"i]").hide()
-                })
+                //create new div to house city's forecast in "forecast"
+                $("#forecast").prepend('<div id="'+cityName+'-forecast"></div>')
+                $("#forecast").css("overflow","hidden")
+                $("#"+cityName+"-forecast").append("<h1>5-Day Forecast:</h1>")
+                $("#"+cityName+"-forecast").append('<div class="col-2 forecastDiv">'+date1+'<br><img src="'+icon1+'"><br>Temp: '+temp1+'&#8457<br>Humidity: '+humidity1+'%</div>')
+                $("#"+cityName+"-forecast").append('<div class="col-2 forecastDiv">'+date2+'<br><img src="'+icon2+'"><br>Temp: '+temp2+'&#8457<br>Humidity: '+humidity2+'%</div>')
+                $("#"+cityName+"-forecast").append('<div class="col-2 forecastDiv">'+date3+'<br><img src="'+icon3+'"><br>Temp: '+temp3+'&#8457<br>Humidity: '+humidity3+'%</div>')
+                $("#"+cityName+"-forecast").append('<div class="col-2 forecastDiv">'+date4+'<br><img src="'+icon4+'"><br>Temp: '+temp4+'&#8457<br>Humidity: '+humidity4+'%</div>')
+                $("#"+cityName+"-forecast").append('<div class="col-2 forecastDiv">'+date5+'<br><img src="'+icon5+'"><br>Temp: '+temp5+'&#8457<br>Humidity: '+humidity5+'%</div>')
+                $(".forecastDiv").css("border","solid 1px black").css("width","200px").css("float","left").css("background-color","blue").css("color","white")
+
+            })
         })
         .catch(function(){
             goodCity = "no"
