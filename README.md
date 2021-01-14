@@ -36,7 +36,7 @@ Deployed application link: (https://diane-furlong.github.io/Weather-Dashboard/)
 
 
 Screenshot of deployed application:<br>
-<img src="" width="700px"><br><br>
+<img src="./assets/screenshot.png" width="700px"><br><br>
 
 
 ## Table of Contents
