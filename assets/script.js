@@ -30,7 +30,7 @@ $(document).ready(function(){
                 let icon = "http://openweathermap.org/img/wn/"+response.weather[0].icon+".png"
                 let now = new Date()
                 let date = (now.getMonth() + 1)+"/"+now.getDate()+"/"+now.getFullYear()
-                let temp = response.main.temp
+                let temp = (response.main.temp).toFixed(0)
                 let humidity = response.main.humidity
                 let windSpeed = response.wind.speed
                 let date1 = (now.getMonth() + 1)+"/"+(now.getDate() + 1)+"/"+now.getFullYear()
@@ -43,11 +43,11 @@ $(document).ready(function(){
                 let icon3 = "http://openweathermap.org/img/wn/"+response2.list[18].weather[0].icon+".png"
                 let icon4 = "http://openweathermap.org/img/wn/"+response2.list[26].weather[0].icon+".png"
                 let icon5 = "http://openweathermap.org/img/wn/"+response2.list[34].weather[0].icon+".png"
-                let temp1 = response2.list[2].main.temp
-                let temp2 = response2.list[10].main.temp
-                let temp3 = response2.list[18].main.temp
-                let temp4 = response2.list[26].main.temp
-                let temp5 = response2.list[34].main.temp
+                let temp1 = (response2.list[2].main.temp).toFixed(0)
+                let temp2 = (response2.list[10].main.temp).toFixed(0)
+                let temp3 = (response2.list[18].main.temp).toFixed(0)
+                let temp4 = (response2.list[26].main.temp).toFixed(0)
+                let temp5 = (response2.list[34].main.temp).toFixed(0)
                 let humidity1 = response2.list[2].main.humidity
                 let humidity2 = response2.list[10].main.humidity
                 let humidity3 = response2.list[18].main.humidity
